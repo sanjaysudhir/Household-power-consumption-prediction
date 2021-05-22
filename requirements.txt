@@ -3,5 +3,5 @@ streamlit
 numpy>= 1.19.5
 matplotlib>=3.1.1
 sklearn
-
+statsmodels>=0.12.2
 
