@@ -16,32 +16,11 @@ st.text("")
 
 #Import data file
 
-path = 'household_power_consumption.txt'
-
-dtypes = {'Date': str,
-          'Time': str,
-          'Global_active_power': float,
-          'Global_reactive_power': float,
-          'Voltage': float,
-          'Global_intensity': float,
-          'Sub_metering_1': float,
-          'Sub_metering_2': float,
-          'Sub_metering_3': float}
-
-#Deal with missing values
-energy = pd.read_csv(path, sep=';',dtype=dtypes, na_values="?")
-energy = energy.fillna(method='ffill')
-#Insert additional columns
-energy.insert(0, 'Date_Time', pd.to_datetime(energy['Date'] + ' ' + energy['Time'])) #datetime format
-energy.insert(2, 'Year',energy['Date_Time'].dt.year) #year
-energy.insert(3, 'Month',energy['Date_Time'].dt.month) #month
-energy.insert(4, 'Day',energy['Date_Time'].dt.weekday) #weekday_name
-energy.insert(5, 'Hour',energy['Date_Time'].dt.hour) #hour
-
-#Exclude other numerical variables (univariate analysis)
-energy = energy.iloc[:,0:8]
-
-
+data = st.file_uploader("Upload CSV",type=["csv"])
+df = pd.read_csv(data,parse_dates=['Date_Time'])
+df['Date_Time'] = pd.to_datetime(df['Date_Time'], errors='coerce')
+df.drop(df.columns[[0]], axis = 1, inplace = True)
+energy = df
 st.write(energy.head())
 
 
